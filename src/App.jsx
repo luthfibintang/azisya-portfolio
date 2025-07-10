@@ -4,6 +4,7 @@ import gsap from 'gsap';
 import {useGSAP} from '@gsap/react'
 import { SplitText } from "gsap/SplitText";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import profileImage from "./assets/image/gs_profile.png";
 
 gsap.registerPlugin(useGSAP);
 gsap.registerPlugin(ScrollTrigger);
@@ -24,6 +25,10 @@ function App() {
 
   // Refs for section 2
     const section2Ref = useRef();
+    const aboutMeTitleRef = useRef();
+    const aboutMeTextRef = useRef();
+    const whatIDoTitleRef = useRef();
+    const whatIDoTextRef = useRef();
 
 
   useEffect(() => {
@@ -35,8 +40,6 @@ function App() {
   })
   
   useGSAP(() => {
-    const split = new SplitText('.hero-title', { type: 'chars' });
-    const chars = split.chars; 
 
     const tl = gsap.timeline()
 
@@ -72,7 +75,14 @@ function App() {
 
     tl.fromTo(".preloader-text3",
       {letterSpacing: "-0.1em"},
-      {letterSpacing: "0em", duration: 0.8, ease:"power2.out"},
+      {
+        letterSpacing: "0em",
+        duration: 0.8, 
+        ease:"power2.out", 
+        onStart: () => {
+          window.scrollTo(0, 0);
+          ScrollTrigger.refresh()
+        }},
       "-=0.6"
     )
 
@@ -95,8 +105,10 @@ function App() {
     )
 
     // Hero Title show Animation ("AZISYA LUHTFI BINTANG")
+    const heroTitleSplit = new SplitText('.hero-title', { type: 'chars' });
+    const heroTitleChars = heroTitleSplit.chars; 
     tl.fromTo(
-      chars,
+      heroTitleChars,
       { opacity: 0, filter: "blur(5px)", }, 
       {
         opacity: 1,
@@ -112,6 +124,17 @@ function App() {
       {y: 10, opacity: 0, filter: "blur(2px)"},
       {y: 0, opacity: 1, filter:"blur(0px", duration: 0.8, ease: "power3.out"},
       "-=1.3"
+    )
+
+    tl.fromTo(
+      bgTextRefs.current,
+      { x: 0 },
+      {
+        x: (index) => (index % 2 === 0 ? "-10%" : "10%"),
+        duration: 2,
+        ease: "power2.out",
+      },
+      "-=2"
     )
 
     // Menu hover animation
@@ -217,6 +240,50 @@ function App() {
       )
     })
 
+    // Animations for text in about
+    const aboutMeTitleSplit = new SplitText(aboutMeTitleRef.current, { type: 'chars' });
+
+    gsap.fromTo(
+      aboutMeTitleSplit.chars,
+      { opacity: 0, filter: "blur(5px)" },
+      {
+        opacity: 1,
+        filter: "blur(0px)",
+        ease: "power2.out",
+        stagger: 0.1,
+        scrollTrigger: {
+           trigger: aboutMeTitleRef.current,
+            start: 'top 90%',
+            end: 'top 50%',
+            scrub: true, 
+        },
+      }
+    )
+    
+    const aboutMeTextSplit = new SplitText(aboutMeTextRef.current, { type: 'chars' });
+
+    gsap.fromTo(
+      aboutMeTextSplit.chars,
+      {opacity: 0, filter: "blur(5px)"},
+      {
+        opacity: 1,
+        filter: "blur(0px)",
+        ease: "power2.out",
+        stagger: 0.1,
+        scrollTrigger: {
+          trigger: aboutMeTextRef.current,
+          start: 'top 90%',
+          end: 'top 50%',
+          scrub: true,
+        }
+      }
+    )
+
+    return () => {
+      aboutMeTitleSplit.revert();
+      aboutMeTextSplit.revert();
+    };
+
   }, [])
   
   
@@ -237,18 +304,18 @@ function App() {
       <main ref={mainRef}>
         <section ref={section1Ref} className="h-screen flex flex-col">
           <div className="absolute top-0 left-0 whitespace-nowrap w-screen h-screen overflow-hidden z-[-1] pointer-events-none justify-center rotate-10">
-            <div ref={(el) => (bgTextRefs.current[0] = el)} className="absolute top-[15%] whitespace-nowrap text-9xl font-semibold text-gray-100">
+            <div ref={(el) => (bgTextRefs.current[0] = el)} className="absolute top-[10%] whitespace-nowrap text-9xl font-medium text-gray-100">
               Frontend Developer · Backend Developer · Mobile Developer · UI/UX · Adaptive Developer · Problem Solver · Fast Learner · Detail-Oriented
             </div>
-            <div ref={(el) => (bgTextRefs.current[1] = el)} style={{transform: "translateX(-50%)"}} className="absolute top-[50%] whitespace-nowrap text-9xl font-semibold text-gray-100">
+            <div ref={(el) => (bgTextRefs.current[1] = el)} style={{transform: "translateX(-50%)"}} className="absolute top-[47.5%] whitespace-nowrap text-9xl font-medium text-gray-100">
               Typescript · Javascript · Node.js · React Native · TailwindCSS · Firebase · Typescript · Javascript · Node.js · React Native · Typescript
             </div>
-            <div ref={(el) => (bgTextRefs.current[2] = el)} className="absolute top-[85%] whitespace-nowrap text-9xl font-semibold text-gray-100">
+            <div ref={(el) => (bgTextRefs.current[2] = el)} className="absolute top-[85%] whitespace-nowrap text-9xl font-medium text-gray-100">
               Adaptive Developer · Problem Solver · Fast Learner · Detail-Oriented · Adaptive Developer · Problem Solver · Fast Learner · Detail-Oriented
             </div>
           </div>
 
-          <div className="flex justify-center items-center gap-20 pt-5">
+          <div className="flex justify-center items-center gap-20 p-6">
             <a href='#' className='relative' ref={(el) => (menuRefs.current[0] = el)}>
               About
               <span className="menu-underline absolute bottom-0 left-0 w-full h-[2px] bg-black"></span>
@@ -264,7 +331,7 @@ function App() {
           </div>
           <div className='flex flex-1 flex-col justify-center items-center gap-8'>
             <div className='flex flex-col justify-center items-center gap-4'>
-              <h1 className='hero-title text-6xl font-bold'>AZISYA LUTHFI BINTANG</h1>
+              <h1 className='hero-title text-8xl font-semibold'>AZISYA LUTHFI BINTANG</h1>
               <p className='hero-subtitle text-lg font-base'>SoftwareEngineer, Web & Mobile Developer</p>
             </div>
             <div className='flex gap-5'>
@@ -289,19 +356,38 @@ function App() {
               </a>
             </div>
           </div>
-          <div className='scroll-animate flex flex-col justify-center items-center pb-2'>
+          <div className='scroll-animate flex flex-col justify-center items-center pb-2 text-gray-600'>
             <p>Scroll</p>
             <div>↓</div>
           </div>
         </section>
 
         {/* Section 2 for about me and what to do  */}
-        <section ref={section2Ref} className='w-screen h-screen bg-white'>
+        <section ref={section2Ref} className='w-screen h-screen bg-white flex py-40 px-40 justify-between gap-10'>
+          {/* About me */}
+          <div className='w-1/2 flex flex-col justify-between'>
+            <div className='flex flex-col gap-10'>
+              <h1 ref={aboutMeTitleRef} className='text-5xl font-semibold'>About Me</h1>
+              <p ref={aboutMeTextRef} className='text-base max-w-2xl leading-7'>I’m a fullstack developer currently pursuing a degree in Informatics, with a strong focus on building modern web and mobile applications. Most of my experience comes from academic projects, hackathons, and personal exploration, which taught me how to solve problems with clarity and structure.</p>
+            </div>
+            <div className='flex flex-col gap-10'>
+              <h1 ref={whatIDoTitleRef} className='text-5xl font-semibold'>What i do</h1>
+              <p ref={whatIDoTextRef} className='text-base max-w-2xl leading-7'>I primarily work with JavaScript, TypeScript, and PHP to build fullstack applications across both web and mobile platforms. My backend experience includes building REST APIs and scalable architectures with Laravel, Node.js, and Express.js, often paired with databases like PostgreSQL, MongoDB, and Firebase. On the frontend, I create responsive interfaces using React.js and mobile experiences using React Native focusing on usability and performance. I enjoy switching between backend logic and UI development, always aiming for maintainable code and real-world impact.</p>
+            </div>
+          </div>
+          <div className='flex w-1/2 items-center justify-end py-10'>
+            <img src={profileImage} className='w-auto h-full object-contain' alt='Profile Image'/>
+          </div>
+        </section>
+
+        {/* Section 3 for works */}
+        <section className='h-screen bg-black'>
 
         </section>
       </main>
     </>
   )
 }
+
 
 export default App
