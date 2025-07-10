@@ -1,0 +1,307 @@
+import './App.css'
+import { useState, useRef, useEffect } from 'react'
+import gsap from 'gsap';
+import {useGSAP} from '@gsap/react'
+import { SplitText } from "gsap/SplitText";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+gsap.registerPlugin(useGSAP);
+gsap.registerPlugin(ScrollTrigger);
+
+function App() {
+  // const [isLoading, setIsLoading] = useState(true)
+  const [hidePreloader, setHidePreloader] = useState(false);
+
+  // Refs for preloader page & container
+  const mainRef = useRef();
+  const preloaderRef = useRef();
+
+  // Refs for section 1
+  const section1Ref = useRef();
+  const menuRefs = useRef([]);
+  const projectButtonRef = useRef(); 
+  const bgTextRefs = useRef([]);
+
+  // Refs for section 2
+    const section2Ref = useRef();
+
+
+  useEffect(() => {
+    if(!hidePreloader){
+      document.body.style.overflow="hidden";
+    } else {
+      document.body.style.overflow="auto";
+    }
+  })
+  
+  useGSAP(() => {
+    const split = new SplitText('.hero-title', { type: 'chars' });
+    const chars = split.chars; 
+
+    const tl = gsap.timeline()
+
+    // Preloader Animation
+    tl.fromTo(".preloader-text1", 
+      {opacity: 0},
+      {opacity: 1, duration: 0.25, ease: "power2.out"}
+    )
+
+    tl.fromTo(".preloader-text1",
+      {letterSpacing: "-0.1em"},
+      {letterSpacing: "0em", duration: 0.8, ease:"power2.out"},
+      "-=0.3"
+    )
+
+    tl.fromTo(".preloader-text2",
+      {opacity: 0},
+      {opacity: 1, duration: 0.25, ease: "power2.out"},
+      "-=0.6"
+    )
+
+    tl.fromTo(".preloader-text2",
+      {letterSpacing: "-0.1em"},
+      {letterSpacing: "0em", duration: 0.8, ease:"power2.out"},
+      "-=0.6"
+    )
+
+    tl.fromTo(".preloader-text3",
+      {opacity: 0},
+      {opacity: 1, duration: 0.25, ease: "power2.out"},
+      "-=0.6"
+    )
+
+    tl.fromTo(".preloader-text3",
+      {letterSpacing: "-0.1em"},
+      {letterSpacing: "0em", duration: 0.8, ease:"power2.out"},
+      "-=0.6"
+    )
+
+    // Animasi push sliding dari preload ke mainpage
+    // Preloader page push ke kiri
+    tl.to(preloaderRef.current, {
+      x: "-100%",
+      duration: 1,
+      ease: "power2.inOut",
+      onComplete: () => {
+        setHidePreloader(true);
+      }
+    }, "+=0.5") 
+
+    // Main page masuk dari kanan ke posisi normal
+    tl.fromTo(mainRef.current, 
+      { x: '100%' }, 
+      { x: '0%', duration: 1, ease: "power2.inOut" },
+      "<"
+    )
+
+    // Hero Title show Animation ("AZISYA LUHTFI BINTANG")
+    tl.fromTo(
+      chars,
+      { opacity: 0, filter: "blur(5px)", }, 
+      {
+        opacity: 1,
+        duration: 0.8,
+        ease: "power2.out",
+        filter: "blur(0px)",
+        stagger: 0.04, 
+      }
+    );
+
+    // Button show animation
+    tl.fromTo(".btn-animation",
+      {y: 10, opacity: 0, filter: "blur(2px)"},
+      {y: 0, opacity: 1, filter:"blur(0px", duration: 0.8, ease: "power3.out"},
+      "-=1.3"
+    )
+
+    // Menu hover animation
+    menuRefs.current.forEach((link) => {
+      const underline = link.querySelector('.menu-underline')
+      gsap.set(underline, {scaleX: 0})
+
+      link.addEventListener("mouseenter", () => {
+        gsap.to(underline, {
+          scaleX: 1,
+          duration: 0.3,
+          ease: "power2.out",
+          transformOrigin: "left"
+        });
+      });
+
+      link.addEventListener("mouseleave", () => {
+        gsap.to(underline, {
+          scaleX: 0,
+          duration: 0.3,
+          ease: "power2.out",
+          transformOrigin: "right",
+        })
+      });
+    });
+
+    // Project button hover animation
+    const projectButton = projectButtonRef.current;
+    const defaultText = projectButton.querySelector('.btn-text-default')
+    const hoverText = projectButton.querySelector('.btn-text-hover')
+
+    gsap.set(defaultText, {z: 0, opacity: 1, scale: 1})
+    gsap.set(hoverText, {z: -20, opacity: 0, y: 28, scale: 1.2, filter: "blur(3px)"})
+
+    projectButton.addEventListener("mouseenter", () => {
+      gsap.to(projectButton, {
+        backgroundColor: "#000000",
+        color: "#ffffff",
+        duration: 0.4,
+        ease: "power3.inOut"
+      });
+      gsap.to(defaultText, {
+        z: 20, 
+        y: -28,
+        opacity: 0,
+        scale: "0.8",
+        filter: "blur(3px)",
+        duration: 0.4,
+        ease: "power3.inOut"
+      });
+      gsap.to(hoverText, {
+        z: 0,
+        y: 0,
+        opacity: 1,
+        scale: 1,
+        filter: "blur(0px)",
+        duration: 0.4,
+        ease: "power3.inOut"
+      })
+    })
+
+    projectButton.addEventListener("mouseleave", () => {
+      gsap.to(projectButton, {
+        backgroundColor: "#ffffff",
+        color: "#000000",
+        duration: 0.4,
+        ease: "power3.inOut"
+      });
+      gsap.to(defaultText, {
+        z: 0,
+        y: 0,
+        opacity: 1,
+        scale: 1,
+        filter: "blur(0px)",
+        duration: 0.4,
+        ease: "power3.inOut"
+      });
+      gsap.to(hoverText, {
+        z: -20,
+        y: 28,
+        opacity: 1,
+        filter: "blur(3px)",
+        scale: 1.2,
+        duration: 0.4,
+        ease: "power3.inOut"
+      })
+    })
+
+    bgTextRefs.current.forEach((text, index) => {
+      gsap.fromTo(
+        text,
+        {x: 0},
+        {
+          x: index % 2 === 0 ? "-40%" : "40%",
+          ease: "none",
+          scrollTrigger: {
+            trigger: section1Ref.current,
+            start: 'top top',
+            end: 'bottom top',
+            scrub: 2.5,
+          }
+        }
+      )
+    })
+
+  }, [])
+  
+  
+
+  return (
+   <>
+      {!hidePreloader && (
+        <section ref={preloaderRef} className='fixed top-0 left-0 w-full h-full bg-[#27272A] text-white flex justify-center items-center z-50'>
+          <div className='flex flex-1 h-full flex-col justify-between p-10'>
+            <h1 className='preloader-text1 text-8xl font-medium'>Mobile</h1>
+            <h1 className='preloader-text2 flex justify-center text-8xl font-medium'>Website</h1>
+            <h1 className='preloader-text3 flex justify-end text-8xl font-medium'>Developer</h1>
+          </div>
+        </section>
+      )}
+
+      {/* Section 1 for introducing the website and to show the menu */}
+      <main ref={mainRef}>
+        <section ref={section1Ref} className="h-screen flex flex-col">
+          <div className="absolute top-0 left-0 whitespace-nowrap w-screen h-screen overflow-hidden z-[-1] pointer-events-none justify-center rotate-10">
+            <div ref={(el) => (bgTextRefs.current[0] = el)} className="absolute top-[15%] whitespace-nowrap text-9xl font-semibold text-gray-100">
+              Frontend Developer · Backend Developer · Mobile Developer · UI/UX · Adaptive Developer · Problem Solver · Fast Learner · Detail-Oriented
+            </div>
+            <div ref={(el) => (bgTextRefs.current[1] = el)} style={{transform: "translateX(-50%)"}} className="absolute top-[50%] whitespace-nowrap text-9xl font-semibold text-gray-100">
+              Typescript · Javascript · Node.js · React Native · TailwindCSS · Firebase · Typescript · Javascript · Node.js · React Native · Typescript
+            </div>
+            <div ref={(el) => (bgTextRefs.current[2] = el)} className="absolute top-[85%] whitespace-nowrap text-9xl font-semibold text-gray-100">
+              Adaptive Developer · Problem Solver · Fast Learner · Detail-Oriented · Adaptive Developer · Problem Solver · Fast Learner · Detail-Oriented
+            </div>
+          </div>
+
+          <div className="flex justify-center items-center gap-20 pt-5">
+            <a href='#' className='relative' ref={(el) => (menuRefs.current[0] = el)}>
+              About
+              <span className="menu-underline absolute bottom-0 left-0 w-full h-[2px] bg-black"></span>
+            </a>
+            <a href='#' className='relative' ref={(el) => (menuRefs.current[1] = el)}>
+              Works
+              <span className="menu-underline absolute bottom-0 left-0 w-full h-[2px] bg-black"></span>
+            </a>
+            <a href='#' className='relative' ref={(el) => (menuRefs.current[2] = el)}>
+              Contact
+              <span className="menu-underline absolute bottom-0 left-0 w-full h-[2px] bg-black"></span>
+            </a>
+          </div>
+          <div className='flex flex-1 flex-col justify-center items-center gap-8'>
+            <div className='flex flex-col justify-center items-center gap-4'>
+              <h1 className='hero-title text-6xl font-bold'>AZISYA LUTHFI BINTANG</h1>
+              <p className='hero-subtitle text-lg font-base'>SoftwareEngineer, Web & Mobile Developer</p>
+            </div>
+            <div className='flex gap-5'>
+              <a
+                href="#"
+                className="btn-animation border border-solid border-black rounded-full py-2 px-4 relative overflow-hidden"
+                ref={projectButtonRef}
+              >
+                <span className="invisible">See my project</span>
+                <span className="btn-text-default absolute inset-0 flex items-center justify-center">
+                  See my project
+                </span>
+                <span className="btn-text-hover absolute inset-0 flex items-center justify-center">
+                  See my project
+                </span>
+              </a>
+              <a ref={(el) => (menuRefs.current[3] = el)} href="#" className='btn-animation rounded-full py-2 px-4 relative'>
+                <div className='flex relative'>
+                  Get in touch
+                  <span className="menu-underline absolute bottom-0 left-0 w-full h-[2px] bg-black"></span>
+                </div>
+              </a>
+            </div>
+          </div>
+          <div className='scroll-animate flex flex-col justify-center items-center pb-2'>
+            <p>Scroll</p>
+            <div>↓</div>
+          </div>
+        </section>
+
+        {/* Section 2 for about me and what to do  */}
+        <section ref={section2Ref} className='w-screen h-screen bg-white'>
+
+        </section>
+      </main>
+    </>
+  )
+}
+
+export default App

@@ -1,0 +1,23 @@
+/* @keyframes pulse {
+  0% { transform: scale(1); opacity: 1 }
+  50% { transform: scale(1.05); opacity: 0.8 }
+  100% { transform: scale(1); opacity: 1 }
+}
+
+.preloader-text {
+  animation: pulse 1.5s ease-in-out infinite;
+} */
+
+@keyframes updown {
+  0%, 100% {
+    transform: translateY(-10px);
+  }
+  /* Di tengah durasi, ia bergerak ke bawah */
+  50% {
+    transform: translateY(0px);
+  }
+}
+
+.scroll-animate {
+  animation: updown 1s ease-in-out infinite;
+}
