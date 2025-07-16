@@ -5,6 +5,9 @@ import {useGSAP} from '@gsap/react'
 import { SplitText } from "gsap/SplitText";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import profileImage from "./assets/image/gs_profile.png";
+import images from './assets/image';
+
+import Lenis from 'lenis';
 
 gsap.registerPlugin(useGSAP);
 gsap.registerPlugin(ScrollTrigger);
@@ -12,6 +15,7 @@ gsap.registerPlugin(ScrollTrigger);
 function App() {
   // const [isLoading, setIsLoading] = useState(true)
   const [hidePreloader, setHidePreloader] = useState(false);
+  const [activeImage, setActiveImage] = useState(null);
 
   // Refs for preloader page & container
   const mainRef = useRef();
@@ -24,12 +28,29 @@ function App() {
   const bgTextRefs = useRef([]);
 
   // Refs for section 2
-    const section2Ref = useRef();
-    const aboutMeTitleRef = useRef();
-    const aboutMeTextRef = useRef();
-    const whatIDoTitleRef = useRef();
-    const whatIDoTextRef = useRef();
+  const section2Ref = useRef();
+  const aboutMeTitleRef = useRef();
+  const aboutMeTextRef = useRef();
+  const whatIDoTitleRef = useRef();
+  const whatIDoTextRef = useRef();
 
+  // Refs for section 3 (works)
+  const linkContainer = useRef();
+  const previewRef = useRef();
+  const linkRef = useRef();
+
+  useEffect(() => {
+    const lenis = new Lenis({
+      duration: 1.5,
+      smooth: true,
+      smoothTouch: true
+    });
+    function raf(time){
+      lenis.raf(time);
+      requestAnimationFrame(raf);
+    }
+    requestAnimationFrame(raf);
+  })
 
   useEffect(() => {
     if(!hidePreloader){
@@ -228,7 +249,7 @@ function App() {
         text,
         {x: 0},
         {
-          x: index % 2 === 0 ? "-40%" : "40%",
+          x: index % 2 === 0 ? "-30%" : "30%",
           ease: "none",
           scrollTrigger: {
             trigger: section1Ref.current,
@@ -260,16 +281,16 @@ function App() {
       }
     )
     
-    const aboutMeTextSplit = new SplitText(aboutMeTextRef.current, { type: 'chars' });
+    const aboutMeTextSplit = new SplitText(aboutMeTextRef.current, { type: 'words' });
 
     gsap.fromTo(
-      aboutMeTextSplit.chars,
+      aboutMeTextSplit.words,
       {opacity: 0, filter: "blur(5px)"},
       {
         opacity: 1,
         filter: "blur(0px)",
         ease: "power2.out",
-        stagger: 0.1,
+        stagger: 0.07,
         scrollTrigger: {
           trigger: aboutMeTextRef.current,
           start: 'top 90%',
@@ -279,12 +300,117 @@ function App() {
       }
     )
 
+    const whatIDoTitleSplit = new SplitText(whatIDoTitleRef.current, { type: 'chars' });
+
+    gsap.fromTo(
+      whatIDoTitleSplit.chars,
+      { opacity: 0, filter: "blur(5px)" },
+      {
+        opacity: 1,
+        filter: "blur(0px)",
+        ease: "power2.out",
+        stagger: 0.1,
+        scrollTrigger: {
+           trigger: whatIDoTitleRef.current,
+            start: 'top 90%',
+            end: 'top 50%',
+            scrub: true, 
+        },
+      }
+    )
+    
+    const whatIDoTextSplit = new SplitText(whatIDoTextRef.current, { type: 'words' });
+
+    gsap.fromTo(
+      whatIDoTextSplit.words,
+      {opacity: 0, filter: "blur(5px)"},
+      {
+        opacity: 1,
+        filter: "blur(0px)",
+        ease: "power2.out",
+        stagger: 0.07,
+        scrollTrigger: {
+          trigger: whatIDoTextRef.current,
+          start: 'top 90%',
+          end: 'top 50%',
+          scrub: true,
+        }
+      }
+    )
+
+    // SECTION 3 ANIMATIONS
+    const preview = previewRef.current;
+    const workslinkContainer = linkContainer.current;
+
+    gsap.set(preview, { scale: 0 });
+
+    const movePreview = (e) => {
+      gsap.to(preview, {
+        x: e.pageX,
+        y: e.pageY,
+        duration: 0.5,
+        // ease: "power2.out"
+      });
+    };
+
+    const handleEnter = (e) => {
+      gsap.set(preview, {
+        xPercent: -50,
+        yPercent: -50,
+        x: e.pageX,
+        y: e.pageY,
+        scale: 0,
+      });
+
+      gsap.to(preview, {
+        scale: 1,
+        zIndex: 99,
+        duration: 0.3,
+        ease: "power2.out",
+      });
+
+      window.addEventListener("mousemove", movePreview);
+    };
+
+    const handleLeave = () => {
+      gsap.to(preview, {
+        scale: 0,
+        duration: 0.3,
+        ease: "power2.in",
+      });
+    };
+
+    workslinkContainer.addEventListener("mouseenter", handleEnter);
+    workslinkContainer.addEventListener("mouseleave", handleLeave);
+
     return () => {
       aboutMeTitleSplit.revert();
       aboutMeTextSplit.revert();
+      whatIDoTitleSplit.revert();
+      whatIDoTextSplit.revert();
     };
 
   }, [])
+
+  const works = [
+    {
+      title: "Regrant",
+      category: "Mobile Application",
+      link: "https://github.com/luthfibintang/Quibly",
+      image: images.regrantPreview,
+    },
+    {
+      title: "Trippy",
+      category: "Web Application",
+      link: "https://trippy.my.id/public",
+      image: images.trippyPreview,
+    },
+    {
+      title: "Fallsentry",
+      category: "IoT",
+      link: images.fallsentryPreview
+    }
+  ]
   
   
 
@@ -372,17 +498,50 @@ function App() {
             </div>
             <div className='flex flex-col gap-10'>
               <h1 ref={whatIDoTitleRef} className='text-5xl font-semibold'>What i do</h1>
-              <p ref={whatIDoTextRef} className='text-base max-w-2xl leading-7'>I primarily work with JavaScript, TypeScript, and PHP to build fullstack applications across both web and mobile platforms. My backend experience includes building REST APIs and scalable architectures with Laravel, Node.js, and Express.js, often paired with databases like PostgreSQL, MongoDB, and Firebase. On the frontend, I create responsive interfaces using React.js and mobile experiences using React Native focusing on usability and performance. I enjoy switching between backend logic and UI development, always aiming for maintainable code and real-world impact.</p>
+              <p ref={whatIDoTextRef} className='text-base max-w-2xl leading-7'>I primarily work with JavaScript, TypeScript, and PHP to build fullstack applications across both web and mobile platforms. My backend experience includes building REST APIs and scalable architectures with Laravel, Node.js, and Express.js, often paired with databases like MySQL, PostgreSQL, MongoDB, and Firebase. On the frontend, I create responsive interfaces using React.js and mobile experiences using React Native focusing on usability and performance. I enjoy switching between backend logic and frontend development, always aiming for maintainable code and real-world impact.</p>
             </div>
           </div>
-          <div className='flex w-1/2 items-center justify-end py-10'>
-            <img src={profileImage} className='w-auto h-full object-contain' alt='Profile Image'/>
+          <div className='flex flex-col gap-10 w-1/2 items-center justify-end py-10'>
+            <img src={images.profileImage} className='w-auto h-full object-cover' alt='Profile Image'/>
+            {/* <a ref={(el) => (menuRefs.current[4] = el)} className='btn-animation text-lg relative' href="#">
+              <div className='jump-animation flex relative btn-semibold'>
+                get Resume
+                <span className="menu-underline absolute bottom-0 left-0 w-full h-[2px] bg-black"></span>
+              </div>
+            </a> */}
           </div>
         </section>
 
         {/* Section 3 for works */}
-        <section className='h-screen bg-black'>
-
+        <section className='w-screen flex-col bg-white flex pb-50 pt-10 px-40 justify-between gap-20'>
+          <h1 className='font-semibold text-5xl'>
+            Recent Work
+          </h1>
+          <div ref={linkContainer} className='border-t border-gray-200'>
+            {works.map((work, i) => (
+              <a 
+                href={work.link} 
+                target='_blank' 
+                onMouseEnter={() => setActiveImage(work.image)}
+                className='relative flex justify-between items-center py-10 px-10 border-b border-gray-200 cursor-pointer transition-colors'
+              >
+                <h2 className='text-2xl font-medium'>{work.title}</h2>
+                <p className='text-sm text-gray-500'>{work.category}</p>
+              </a>
+            ))}
+              <div
+                ref={previewRef}
+                className="fixed top-0 left-0 pointer-events-none"
+              >
+                <div className="w-lg h-lg bg-black p-1 shadow-2xl relative border">
+                  <img
+                    src={activeImage}
+                    alt="preview"
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+              </div>
+          </div>
         </section>
       </main>
     </>
