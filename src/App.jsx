@@ -394,6 +394,12 @@ function App() {
 
   const works = [
     {
+      title: "Envirolyst",
+      category: "Web Application",
+      link: "https://github.com/MuhammadFarrasThohari/Envirolyst",
+      image: images.envirolystPreview,
+    },
+    {
       title: "Regrant",
       category: "Mobile Application",
       link: "https://github.com/luthfibintang/Quibly",
@@ -405,11 +411,6 @@ function App() {
       link: "https://trippy.my.id/public",
       image: images.trippyPreview,
     },
-    {
-      title: "Fallsentry",
-      category: "IoT",
-      link: images.fallsentryPreview
-    }
   ]
   
   
