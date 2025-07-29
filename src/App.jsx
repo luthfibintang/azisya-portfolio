@@ -544,6 +544,18 @@ function App() {
               </div>
           </div>
         </section>
+        <section style={{backgroundColor: "#27272A"}} className='w-screen h-screen flex-col flex px-40 justify-center gap-25 text-white'>
+            <div className='flex flex-col gap-7'>
+              <h1 className='text-8xl font-semibold letter-spacing-5'>Let's work together</h1>
+              <p className='text-lg '>Feel free to reach out if you have a project in mind or just want to connect</p>
+            </div>
+            <hr className='opacity-50'/>
+            <div className='flex gap-5'>
+              <a target='_blank' href="mailto:azisya.luthfibintang@gmail.com" className='border border-white rounded-full py-5 px-8'>azisya.luthfibintang@gmail.com</a>
+              <a target='_blank' href="https://www.linkedin.com/in/azisya-luthfi-bintang/" className='border border-white rounded-full py-5 px-8'>Linkedin</a>
+              <a target='_blank' href="https://github.com/luthfibintang/" className='border border-white rounded-full py-5 px-8'>Github</a>
+            </div>
+        </section>
       </main>
     </>
   )
