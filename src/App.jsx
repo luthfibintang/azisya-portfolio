@@ -412,8 +412,13 @@ function App() {
       image: images.trippyPreview,
     },
   ]
-  
-  
+
+  useEffect(() => {
+    works.forEach((work) => {
+      const img = new Image();
+      img.src = work.image;
+    });
+  }, []);
 
   return (
    <>
@@ -434,7 +439,7 @@ function App() {
             <div ref={(el) => (bgTextRefs.current[0] = el)} className="absolute top-[10%] whitespace-nowrap text-9xl font-medium text-gray-100">
               Frontend Developer · Backend Developer · Mobile Developer · UI/UX · Adaptive Developer · Problem Solver · Fast Learner · Detail-Oriented
             </div>
-            <div ref={(el) => (bgTextRefs.current[1] = el)} style={{transform: "translateX(-50%)"}} className="absolute top-[47.5%] whitespace-nowrap text-9xl font-medium text-gray-100">
+            <div ref={(el) => (bgTextRefs.current[1] = el)} className="absolute top-[47.5%] left-1/2 -translate-x-1/2 whitespace-nowrap text-9xl font-medium text-gray-100">
               Typescript · Javascript · Node.js · React Native · TailwindCSS · Firebase · Typescript · Javascript · Node.js · React Native · Typescript
             </div>
             <div ref={(el) => (bgTextRefs.current[2] = el)} className="absolute top-[85%] whitespace-nowrap text-9xl font-medium text-gray-100">
