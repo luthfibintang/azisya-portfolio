@@ -4,13 +4,16 @@ import gsap from 'gsap';
 import {useGSAP} from '@gsap/react'
 import { SplitText } from "gsap/SplitText";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import profileImage from "./assets/image/gs_profile.png";
+import { ScrollToPlugin } from "gsap/ScrollToPlugin";
+import worksData from "./data/worksData"
 import images from './assets/image';
+
 
 import Lenis from 'lenis';
 
 gsap.registerPlugin(useGSAP);
 gsap.registerPlugin(ScrollTrigger);
+gsap.registerPlugin(ScrollToPlugin);
 
 function App() {
   // const [isLoading, setIsLoading] = useState(true)
@@ -35,9 +38,12 @@ function App() {
   const whatIDoTextRef = useRef();
 
   // Refs for section 3 (works)
+  const section3Ref = useRef();
   const linkContainer = useRef();
   const previewRef = useRef();
-  const linkRef = useRef();
+
+  // Refs for section 4 (contact)
+  const section4Ref = useRef();
 
   useEffect(() => {
     const lenis = new Lenis({
@@ -392,26 +398,17 @@ function App() {
 
   }, [])
 
-  const works = [
-    {
-      title: "Envirolyst",
-      category: "Web Application",
-      link: "https://github.com/MuhammadFarrasThohari/Envirolyst",
-      image: images.envirolystPreview,
+  const scrollToWorks = (sectionRef) => {
+  gsap.to(window, {
+    duration: 1.5,
+    scrollTo: {
+      y: sectionRef.current,
     },
-    {
-      title: "Regrant",
-      category: "Mobile Application",
-      link: "https://github.com/luthfibintang/Quibly",
-      image: images.regrantPreview,
-    },
-    {
-      title: "Trippy",
-      category: "Web Application",
-      link: "https://trippy.my.id/public",
-      image: images.trippyPreview,
-    },
-  ]
+    ease: "power2.inOut"
+  });
+};
+
+  const works = worksData;
 
   useEffect(() => {
     works.forEach((work) => {
@@ -448,18 +445,18 @@ function App() {
           </div>
 
           <div className="flex justify-center items-center gap-20 p-6">
-            <a href='#' className='relative' ref={(el) => (menuRefs.current[0] = el)}>
+            <button onClick={() => scrollToWorks(section2Ref)} className='cursor-pointer' ref={(el) => (menuRefs.current[0] = el)}>
               About
               <span className="menu-underline absolute bottom-0 left-0 w-full h-[2px] bg-black"></span>
-            </a>
-            <a href='#' className='relative' ref={(el) => (menuRefs.current[1] = el)}>
+            </button>
+            <button onClick={() => scrollToWorks(section3Ref)} className='cursor-pointer' ref={(el) => (menuRefs.current[1] = el)}>
               Works
               <span className="menu-underline absolute bottom-0 left-0 w-full h-[2px] bg-black"></span>
-            </a>
-            <a href='#' className='relative' ref={(el) => (menuRefs.current[2] = el)}>
+            </button>
+            <button onClick={() => scrollToWorks(section4Ref)} className='cursor-pointer' ref={(el) => (menuRefs.current[2] = el)}>
               Contact
               <span className="menu-underline absolute bottom-0 left-0 w-full h-[2px] bg-black"></span>
-            </a>
+            </button>
           </div>
           <div className='flex flex-1 flex-col justify-center items-center gap-8'>
             <div className='flex flex-col justify-center items-center gap-4'>
@@ -467,9 +464,9 @@ function App() {
               <p className='hero-subtitle text-lg font-base'>SoftwareEngineer, Web & Mobile Developer</p>
             </div>
             <div className='flex gap-5'>
-              <a
-                href="#"
-                className="btn-animation border border-solid border-black rounded-full py-2 px-4 relative overflow-hidden"
+              <button
+                onClick={() => scrollToWorks(section3Ref)}
+                className="btn-animation border border-solid border-black rounded-full py-2 px-4 relative overflow-hidden cursor-pointer"
                 ref={projectButtonRef}
               >
                 <span className="invisible">See my project</span>
@@ -479,8 +476,8 @@ function App() {
                 <span className="btn-text-hover absolute inset-0 flex items-center justify-center">
                   See my project
                 </span>
-              </a>
-              <a ref={(el) => (menuRefs.current[3] = el)} href="#" className='btn-animation rounded-full py-2 px-4 relative'>
+              </button>
+              <a ref={(el) => (menuRefs.current[3] = el)} target='_blank' href="https://www.linkedin.com/in/azisya-luthfi-bintang/" className='btn-animation rounded-full py-2 px-4 relative'>
                 <div className='flex relative'>
                   Get in touch
                   <span className="menu-underline absolute bottom-0 left-0 w-full h-[2px] bg-black"></span>
@@ -519,7 +516,7 @@ function App() {
         </section>
 
         {/* Section 3 for works */}
-        <section className='w-screen flex-col bg-white flex pb-50 pt-10 px-40 justify-between gap-20'>
+        <section ref={section3Ref} className='w-screen flex-col bg-white flex pb-50 pt-10 px-40 justify-between gap-20'>
           <h1 className='font-semibold text-5xl'>
             Recent Work
           </h1>
@@ -549,7 +546,7 @@ function App() {
               </div>
           </div>
         </section>
-        <section style={{backgroundColor: "#27272A"}} className='w-screen h-screen flex-col flex px-40 justify-center gap-25 text-white'>
+        <section ref={section4Ref} style={{backgroundColor: "#27272A"}} className='w-screen h-screen flex-col flex px-40 justify-center gap-25 text-white'>
             <div className='flex flex-col gap-7'>
               <h1 className='text-8xl font-semibold letter-spacing-5'>Let's work together</h1>
               <p className='text-lg '>Feel free to reach out if you have a project in mind or just want to connect</p>
