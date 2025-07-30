@@ -8,10 +8,10 @@ const works = [
       image: images.envirolystPreview,
     },
     {
-      title: "Regrant",
+      title: "Quibly",
       category: "Mobile Application",
       link: "https://github.com/luthfibintang/Quibly",
-      image: images.regrantPreview,
+      image: images.quiblyPreview
     },
     {
       title: "Trippy",
@@ -24,7 +24,14 @@ const works = [
       category: "Web Application",
       link: "https://github.com/zizky13/WaterWise",
       image: images.waterWisePreview,
-    }
+    },
+    {
+      title: "Regrant",
+      category: "Mobile Application",
+      link: "https://github.com/luthfibintang/Quibly",
+      image: images.regrantPreview,
+    },
+    
   ]
 
 export default works;

@@ -350,21 +350,84 @@ function App() {
 
     gsap.set(preview, { scale: 0 });
 
-    const movePreview = (e) => {
-      gsap.to(preview, {
-        x: e.pageX,
-        y: e.pageY,
-        duration: 0.5,
-        // ease: "power2.out"
+    const workItems = linkContainer.current.querySelectorAll('a');
+    workItems.forEach((item) => {
+      const bg = item.querySelector('.work-bg');
+      const title = item.querySelector('.work-title');
+      const category = item.querySelector('.work-category');
+      
+      gsap.set(bg, { yPercent: 100 });
+      
+      item.addEventListener('mouseenter', () => {
+        gsap.to(bg, {
+          yPercent: 0,
+          duration: 0.6,
+          ease: "power3.out"
+        });
+        gsap.to([title, category], {
+          color: "#ffffff",
+          duration: 0.4,
+          ease: "power2.out"
+        });
+        gsap.to(item, {
+          paddingLeft: "1.5rem", // px-8 (32px)
+          paddingRight: "1.5rem", // px-8 (32px)
+          duration: 0.6,
+          ease: "power3.out"
+        });
       });
+      
+      item.addEventListener('mouseleave', () => {
+        gsap.to(bg, {
+          yPercent: 100,
+          duration: 0.6,
+          ease: "power3.out"
+        });
+        gsap.to(title, {
+          color: "#000000",
+          duration: 0.4,
+          ease: "power2.out"
+        });
+        gsap.to(category, {
+          color: "#6b7280", // gray-500
+          duration: 0.4,
+          ease: "power2.out"
+        });
+        gsap.to(item, {
+          paddingLeft: "2.5rem", // px-10 (40px) - back to original
+          paddingRight: "2.5rem", // px-10 (40px) - back to original
+          duration: 0.6,
+          ease: "power3.out"
+        });
+      });
+    });
+
+    let lastMouseEvent;
+    const movePreview = (e) => {
+      lastMouseEvent = e;
+      gsap.to(preview, {
+        x: e.clientX,
+        y: e.clientY + window.scrollY,
+        duration: 0.5,
+      });
+    };
+
+    const scrollInPreview = (e) => {
+      if (lastMouseEvent) {
+        gsap.to(preview, {
+          x: lastMouseEvent.clientX,
+          y: lastMouseEvent.clientY + window.scrollY,
+          duration: 0.1,
+        });
+      }
     };
 
     const handleEnter = (e) => {
       gsap.set(preview, {
         xPercent: -50,
         yPercent: -50,
-        x: e.pageX,
-        y: e.pageY,
+        x: e.clientX,
+        y: e.clientY + window.scrollY,
         scale: 0,
       });
 
@@ -376,6 +439,7 @@ function App() {
       });
 
       window.addEventListener("mousemove", movePreview);
+      window.addEventListener("scroll", scrollInPreview);
     };
 
     const handleLeave = () => {
@@ -399,14 +463,14 @@ function App() {
   }, [])
 
   const scrollToWorks = (sectionRef) => {
-  gsap.to(window, {
-    duration: 1.5,
-    scrollTo: {
-      y: sectionRef.current,
-    },
-    ease: "power2.inOut"
-  });
-};
+    gsap.to(window, {
+      duration: 1.5,
+      scrollTo: {
+        y: sectionRef.current,
+      },
+      ease: "power2.inOut"
+    });
+  };
 
   const works = worksData;
 
@@ -420,7 +484,7 @@ function App() {
   return (
    <>
       {!hidePreloader && (
-        <section ref={preloaderRef} className='fixed top-0 left-0 w-full h-full bg-[#27272A] text-white flex justify-center items-center z-50'>
+        <section ref={preloaderRef} className='fixed top-0 left-0 w-full h-full bg-[#1C1D20] text-white flex justify-center items-center z-50'>
           <div className='flex flex-1 h-full flex-col justify-between p-10'>
             <h1 className='preloader-text1 text-8xl font-medium'>Mobile</h1>
             <h1 className='preloader-text2 flex justify-center text-8xl font-medium'>Website</h1>
@@ -445,15 +509,15 @@ function App() {
           </div>
 
           <div className="flex justify-center items-center gap-20 p-6">
-            <button onClick={() => scrollToWorks(section2Ref)} className='cursor-pointer' ref={(el) => (menuRefs.current[0] = el)}>
+            <button onClick={() => scrollToWorks(section2Ref)} className='relative cursor-pointer' ref={(el) => (menuRefs.current[0] = el)}>
               About
               <span className="menu-underline absolute bottom-0 left-0 w-full h-[2px] bg-black"></span>
             </button>
-            <button onClick={() => scrollToWorks(section3Ref)} className='cursor-pointer' ref={(el) => (menuRefs.current[1] = el)}>
+            <button onClick={() => scrollToWorks(section3Ref)} className='relative cursor-pointer' ref={(el) => (menuRefs.current[1] = el)}>
               Works
               <span className="menu-underline absolute bottom-0 left-0 w-full h-[2px] bg-black"></span>
             </button>
-            <button onClick={() => scrollToWorks(section4Ref)} className='cursor-pointer' ref={(el) => (menuRefs.current[2] = el)}>
+            <button onClick={() => scrollToWorks(section4Ref)} className='relative cursor-pointer' ref={(el) => (menuRefs.current[2] = el)}>
               Contact
               <span className="menu-underline absolute bottom-0 left-0 w-full h-[2px] bg-black"></span>
             </button>
@@ -522,14 +586,17 @@ function App() {
           </h1>
           <div ref={linkContainer} className='border-t border-gray-200'>
             {works.map((work, i) => (
-              <a 
+              <a
+                key={i}
                 href={work.link} 
                 target='_blank' 
                 onMouseEnter={() => setActiveImage(work.image)}
-                className='relative flex justify-between items-center py-10 px-10 border-b border-gray-200 cursor-pointer transition-colors'
+                className='relative flex justify-between items-center h-30 px-10 border-b border-gray-200 cursor-pointer overflow-hidden'
               >
-                <h2 className='text-2xl font-medium'>{work.title}</h2>
-                <p className='text-sm text-gray-500'>{work.category}</p>
+                
+                <h2 className='work-title text-2xl z-10 font-medium'>{work.title}</h2>
+                <p className='work-category text-sm z-10 text-gray-500'>{work.category}</p>
+                <div className="work-bg absolute bg-black inset-0"></div>
               </a>
             ))}
               <div
@@ -546,7 +613,7 @@ function App() {
               </div>
           </div>
         </section>
-        <section ref={section4Ref} style={{backgroundColor: "#27272A"}} className='w-screen h-screen flex-col flex px-40 justify-center gap-25 text-white'>
+        <section ref={section4Ref} style={{backgroundColor: "#1C1D20"}} className='w-screen h-screen flex-col flex px-40 justify-center gap-25 text-white'>
             <div className='flex flex-col gap-7'>
               <h1 className='text-8xl font-semibold letter-spacing-5'>Let's work together</h1>
               <p className='text-lg '>Feel free to reach out if you have a project in mind or just want to connect</p>
