@@ -457,6 +457,7 @@ function App() {
     };
 
     const handleEnter = (e) => {
+       lastMouseEvent = e;
       gsap.set(preview, {
         xPercent: -50,
         yPercent: -50,
