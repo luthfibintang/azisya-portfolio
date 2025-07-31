@@ -19,6 +19,7 @@ function App() {
   // const [isLoading, setIsLoading] = useState(true)
   const [hidePreloader, setHidePreloader] = useState(false);
   const [activeImage, setActiveImage] = useState(null);
+  const [navbarScrolled, setNavbarScrolled] = useState(false);
 
   // Refs for preloader page & container
   const mainRef = useRef();
@@ -39,11 +40,16 @@ function App() {
 
   // Refs for section 3 (works)
   const section3Ref = useRef();
+  const recentWorkRef = useRef();
   const linkContainer = useRef();
   const previewRef = useRef();
 
   // Refs for section 4 (contact)
-  const section4Ref = useRef();
+  const footerRef = useRef();
+  const footerText1Ref = useRef();
+  const footerText2Ref = useRef();
+  const footerButtonContainerRef = useRef();
+  const socialButtonRefs = useRef([]);
 
   useEffect(() => {
     const lenis = new Lenis({
@@ -65,6 +71,15 @@ function App() {
       document.body.style.overflow="auto";
     }
   })
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setNavbarScrolled(window.scrollY > 50);
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
   
   useGSAP(() => {
 
@@ -345,6 +360,25 @@ function App() {
     )
 
     // SECTION 3 ANIMATIONS
+    const recentWorks = new SplitText(recentWorkRef.current, { type: 'chars' });
+
+    gsap.fromTo(
+      recentWorks.chars,
+      { opacity: 0, filter: "blur(5px)" },
+      {
+        opacity: 1,
+        filter: "blur(0px)",
+        ease: "power2.out",
+        stagger: 0.1,
+        scrollTrigger: {
+           trigger: recentWorkRef.current,
+            start: 'top 90%',
+            end: 'top 70%',
+            scrub: true, 
+        },
+      }
+    )
+
     const preview = previewRef.current;
     const workslinkContainer = linkContainer.current;
 
@@ -453,6 +487,128 @@ function App() {
     workslinkContainer.addEventListener("mouseenter", handleEnter);
     workslinkContainer.addEventListener("mouseleave", handleLeave);
 
+    // SECTION 4 ANIMATIONS
+    const footerText1 = new SplitText(footerText1Ref.current, { type: 'chars' });
+
+    gsap.fromTo(
+      footerText1.chars,
+      { opacity: 0, filter: "blur(5px)" },
+      {
+        opacity: 1,
+        filter: "blur(0px)",
+        ease: "power2.out",
+        stagger: 0.1,
+        scrollTrigger: {
+           trigger: footerText1Ref.current,
+            start: 'top 90%',
+            end: 'top 70%',
+            scrub: true, 
+        },
+      }
+    )
+
+    const footerText2 = new SplitText(footerText2Ref.current, { type: 'chars' });
+
+    gsap.fromTo(
+      footerText2.chars,
+      { opacity: 0, filter: "blur(5px)" },
+      {
+        opacity: 1,
+        filter: "blur(0px)",
+        ease: "power2.out",
+        stagger: 0.1,
+        scrollTrigger: {
+           trigger: footerText2Ref.current,
+            start: 'top 90%',
+            end: 'top 70%',
+            scrub: true, 
+        },
+      }
+    )
+
+    gsap.set(".footer-btn-animation", { opacity: 0, y: 10 });
+    gsap.fromTo(
+      ".footer-btn-animation",
+      { opacity: 0, y: 10 },
+      {
+        opacity: 1,
+        y: 0,
+        ease: "power2.out",
+        duration: 1.2,
+        stagger: 0.2,
+        scrollTrigger: {
+           trigger: footerButtonContainerRef.current,
+           start: "top 90%",
+           end: "top 70%",
+           scrub: true, 
+        },
+      }
+    )
+
+    socialButtonRefs.current.forEach((button, index) => {
+        if (!button) return;
+        
+        const socialDefaultText = button.querySelector('.btn-text-default');
+        const socialHoverText = button.querySelector('.btn-text-hover');
+
+        gsap.set(socialDefaultText, {z: 0, opacity: 1, scale: 1});
+        gsap.set(socialHoverText, {z: -20, opacity: 0, y: 42, scale: 1.2, filter: "blur(3px)"});
+
+        button.addEventListener("mouseenter", () => {
+          gsap.to(button, {
+            backgroundColor: "#ffffff",
+            color: "#1C1D20",
+            duration: 0.4,
+            ease: "power3.inOut"
+          });
+          gsap.to(socialDefaultText, {
+            z: 20, 
+            y: -42,
+            opacity: 0,
+            scale: "0.8",
+            filter: "blur(3px)",
+            duration: 0.4,
+            ease: "power3.inOut"
+          });
+          gsap.to(socialHoverText, {
+            z: 0,
+            y: 0,
+            opacity: 1,
+            scale: 1,
+            filter: "blur(0px)",
+            duration: 0.4,
+            ease: "power3.inOut"
+          });
+        });
+
+        button.addEventListener("mouseleave", () => {
+          gsap.to(button, {
+            backgroundColor: "#1C1D20",
+            color: "#ffffff",
+            duration: 0.4,
+            ease: "power3.inOut"
+          });
+          gsap.to(socialDefaultText, {
+            z: 0,
+            y: 0,
+            opacity: 1,
+            scale: 1,
+            filter: "blur(0px)",
+            duration: 0.4,
+            ease: "power3.inOut"
+          });
+          gsap.to(socialHoverText, {
+            z: -20,
+            y: 42,
+            opacity: 1,
+            filter: "blur(3px)",
+            scale: 1.2,
+            duration: 0.4,
+            ease: "power3.inOut"
+          });
+        });
+      });
+
     return () => {
       aboutMeTitleSplit.revert();
       aboutMeTextSplit.revert();
@@ -462,7 +618,7 @@ function App() {
 
   }, [])
 
-  const scrollToWorks = (sectionRef) => {
+  const scrollToClick = (sectionRef) => {
     gsap.to(window, {
       duration: 1.5,
       scrollTo: {
@@ -495,6 +651,24 @@ function App() {
 
       {/* Section 1 for introducing the website and to show the menu */}
       <main ref={mainRef}>
+          <nav 
+            className={`sticky top-0 left-0 w-full z-40 transition-all duration-500 ${navbarScrolled ? 'backdrop-blur-md bg-white/40' : 'bg-transparent'}`}
+          >
+            <div className="flex justify-center items-center gap-20 p-6">
+              <button onClick={() => scrollToClick(section2Ref)} className='relative cursor-pointer' ref={(el) => (menuRefs.current[0] = el)}>
+                About
+                <span className="menu-underline absolute bottom-0 left-0 w-full h-[2px] bg-black"></span>
+              </button>
+              <button onClick={() => scrollToClick(section3Ref)} className='relative cursor-pointer' ref={(el) => (menuRefs.current[1] = el)}>
+                Works
+                <span className="menu-underline absolute bottom-0 left-0 w-full h-[2px] bg-black"></span>
+              </button>
+              <button onClick={() => scrollToClick(footerRef)} className='relative cursor-pointer' ref={(el) => (menuRefs.current[2] = el)}>
+                Contact
+                <span className="menu-underline absolute bottom-0 left-0 w-full h-[2px] bg-black"></span>
+              </button>
+            </div>
+          </nav>
         <section ref={section1Ref} className="h-screen flex flex-col">
           <div className="absolute top-0 left-0 whitespace-nowrap w-screen h-screen overflow-hidden z-[-1] pointer-events-none justify-center rotate-10">
             <div ref={(el) => (bgTextRefs.current[0] = el)} className="absolute top-[10%] whitespace-nowrap text-9xl font-medium text-gray-100">
@@ -507,21 +681,7 @@ function App() {
               Adaptive Developer · Problem Solver · Fast Learner · Detail-Oriented · Adaptive Developer · Problem Solver · Fast Learner · Detail-Oriented
             </div>
           </div>
-
-          <div className="flex justify-center items-center gap-20 p-6">
-            <button onClick={() => scrollToWorks(section2Ref)} className='relative cursor-pointer' ref={(el) => (menuRefs.current[0] = el)}>
-              About
-              <span className="menu-underline absolute bottom-0 left-0 w-full h-[2px] bg-black"></span>
-            </button>
-            <button onClick={() => scrollToWorks(section3Ref)} className='relative cursor-pointer' ref={(el) => (menuRefs.current[1] = el)}>
-              Works
-              <span className="menu-underline absolute bottom-0 left-0 w-full h-[2px] bg-black"></span>
-            </button>
-            <button onClick={() => scrollToWorks(section4Ref)} className='relative cursor-pointer' ref={(el) => (menuRefs.current[2] = el)}>
-              Contact
-              <span className="menu-underline absolute bottom-0 left-0 w-full h-[2px] bg-black"></span>
-            </button>
-          </div>
+          
           <div className='flex flex-1 flex-col justify-center items-center gap-8'>
             <div className='flex flex-col justify-center items-center gap-4'>
               <h1 className='hero-title text-8xl font-semibold'>AZISYA LUTHFI BINTANG</h1>
@@ -529,7 +689,7 @@ function App() {
             </div>
             <div className='flex gap-5'>
               <button
-                onClick={() => scrollToWorks(section3Ref)}
+                onClick={() => scrollToClick(section3Ref)}
                 className="btn-animation border border-solid border-black rounded-full py-2 px-4 relative overflow-hidden cursor-pointer"
                 ref={projectButtonRef}
               >
@@ -580,8 +740,8 @@ function App() {
         </section>
 
         {/* Section 3 for works */}
-        <section ref={section3Ref} className='w-screen flex-col bg-white flex pb-50 pt-10 px-40 justify-between gap-20'>
-          <h1 className='font-semibold text-5xl'>
+        <section ref={section3Ref} className='w-screen flex-col bg-white flex py-20 px-40 justify-between gap-20'>
+          <h1 ref={recentWorkRef} className='font-semibold text-5xl'>
             Recent Work
           </h1>
           <div ref={linkContainer} className='border-t border-gray-200'>
@@ -613,19 +773,58 @@ function App() {
               </div>
           </div>
         </section>
-        <section ref={section4Ref} style={{backgroundColor: "#1C1D20"}} className='w-screen h-screen flex-col flex px-40 justify-center gap-25 text-white'>
-            <div className='flex flex-col gap-7'>
-              <h1 className='text-8xl font-semibold letter-spacing-5'>Let's work together</h1>
-              <p className='text-lg '>Feel free to reach out if you have a project in mind or just want to connect</p>
+      </main>
+      <footer ref={footerRef} style={{backgroundColor: "#1C1D20"}} className='w-screen h-screen flex-col flex px-40 justify-center gap-25 text-white'>
+            <div className='flex flex-col gap-10'>
+              <h1 ref={footerText1Ref} className='text-8xl font-semibold letter-spacing-5'>Let's work together</h1>
+              <p ref={footerText2Ref} className='text-xl'>Feel free to reach out if you have a project in mind or just want to connect</p>
             </div>
             <hr className='opacity-50'/>
-            <div className='flex gap-5'>
-              <a target='_blank' href="mailto:azisya.luthfibintang@gmail.com" className='border border-white rounded-full py-5 px-8'>azisya.luthfibintang@gmail.com</a>
-              <a target='_blank' href="https://www.linkedin.com/in/azisya-luthfi-bintang/" className='border border-white rounded-full py-5 px-8'>Linkedin</a>
-              <a target='_blank' href="https://github.com/luthfibintang/" className='border border-white rounded-full py-5 px-8'>Github</a>
+            <div ref={footerButtonContainerRef} className='flex gap-5'>
+              <a
+                target='_blank'
+                href='mailto:azisya.luthfibintang@gmail.com'
+                className="footer-btn-animation border border-solid border-white rounded-full py-5 px-8 relative overflow-hidden cursor-pointer"
+                ref={(el) => (socialButtonRefs.current[0] = el)}
+              >
+                <span className="invisible">azisya.luthfibintang@gmail.com</span>
+                <span className="btn-text-default absolute inset-0 flex items-center justify-center">
+                  azisya.luthfibintang@gmail.com
+                </span>
+                <span className="btn-text-hover absolute inset-0 flex items-center justify-center">
+                  azisya.luthfibintang@gmail.com
+                </span>
+              </a>
+              <a
+                target='_blank'
+                href='https://www.linkedin.com/in/azisya-luthfi-bintang/'
+                className="footer-btn-animation border border-solid border-white rounded-full py-5 px-8 relative overflow-hidden cursor-pointer"
+                ref={(el) => (socialButtonRefs.current[1] = el)}
+              >
+                <span className="invisible">Linkedin</span>
+                <span className="btn-text-default absolute inset-0 flex items-center justify-center">
+                  Linkedin
+                </span>
+                <span className="btn-text-hover absolute inset-0 flex items-center justify-center">
+                  Linkedin
+                </span>
+              </a>
+              <a
+                target='_blank'
+                href='https://github.com/luthfibintang/'
+                className="footer-btn-animation border border-solid border-white rounded-full py-5 px-8 relative overflow-hidden cursor-pointer"
+                ref={(el) => (socialButtonRefs.current[2] = el)}
+              >
+                <span className="invisible">Github</span>
+                <span className="btn-text-default absolute inset-0 flex items-center justify-center">
+                  Github
+                </span>
+                <span className="btn-text-hover absolute inset-0 flex items-center justify-center">
+                  Github
+                </span>
+              </a>
             </div>
-        </section>
-      </main>
+        </footer>
     </>
   )
 }
