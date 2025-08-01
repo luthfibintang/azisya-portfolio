@@ -270,7 +270,7 @@ function App() {
         text,
         {x: 0},
         {
-          x: index % 2 === 0 ? "-30%" : "30%",
+          x: index % 2 === 0 ? "-75%" : "75%",
           ease: "none",
           scrollTrigger: {
             trigger: section1Ref.current,
@@ -640,22 +640,24 @@ function App() {
 
   return (
    <>
+      {/* Preloading Page */}
       {!hidePreloader && (
-        <section ref={preloaderRef} className='fixed top-0 left-0 w-full h-full bg-[#1C1D20] text-white flex justify-center items-center z-50'>
-          <div className='flex flex-1 h-full flex-col justify-between p-10'>
-            <h1 className='preloader-text1 text-8xl font-medium'>Mobile</h1>
-            <h1 className='preloader-text2 flex justify-center text-8xl font-medium'>Website</h1>
-            <h1 className='preloader-text3 flex justify-end text-8xl font-medium'>Developer</h1>
+        <section ref={preloaderRef} className='fixed top-0 left-0 w-screen h-screen bg-[#1C1D20] text-white flex justify-center items-center z-50'>
+          <div className='flex flex-1 h-full flex-col justify-between font-medium text-4xl p-4 sm:text-5xl sm:p-6 md:text-6xl lg:text-7xl 2xl:text-8xl lg:p-8 2xl:p-10'>
+            <h1 className='preloader-text1 flex justify-start'>Mobile</h1>
+            <h1 className='preloader-text2 flex justify-center'>Website</h1>
+            <h1 className='preloader-text3 flex justify-end'>Developer</h1>
           </div>
         </section>
       )}
 
       {/* Section 1 for introducing the website and to show the menu */}
       <main ref={mainRef}>
+        {/* Navbar */}
           <nav 
-            className={`sticky top-0 left-0 w-full z-40 transition-all duration-500 ${navbarScrolled ? 'backdrop-blur-md bg-white/40' : 'bg-transparent'}`}
+            className={`sticky top-0 left-0 w-screen z-40 transition-all duration-500 ${navbarScrolled ? 'backdrop-blur-md bg-white/40' : 'bg-transparent'}`}
           >
-            <div className="flex justify-center items-center gap-20 p-6">
+            <div className="flex justify-center items-center text-sm sm:text-base gap-8 md:gap-12 lg:gap-20 px-4 py-3 sm:px-6 sm:py-6">
               <button onClick={() => scrollToClick(section2Ref)} className='relative cursor-pointer' ref={(el) => (menuRefs.current[0] = el)}>
                 About
                 <span className="menu-underline absolute bottom-0 left-0 w-full h-[2px] bg-black"></span>
@@ -670,28 +672,34 @@ function App() {
               </button>
             </div>
           </nav>
-        <section ref={section1Ref} className="h-screen flex flex-col">
-          <div className="absolute top-0 left-0 whitespace-nowrap w-screen h-screen overflow-hidden z-[-1] pointer-events-none justify-center rotate-10">
-            <div ref={(el) => (bgTextRefs.current[0] = el)} className="absolute top-[10%] whitespace-nowrap text-9xl font-medium text-gray-100">
-              Frontend Developer · Backend Developer · Mobile Developer · UI/UX · Adaptive Developer · Problem Solver · Fast Learner · Detail-Oriented
-            </div>
-            <div ref={(el) => (bgTextRefs.current[1] = el)} className="absolute top-[47.5%] left-1/2 -translate-x-1/2 whitespace-nowrap text-9xl font-medium text-gray-100">
-              Typescript · Javascript · Node.js · React Native · TailwindCSS · Firebase · Typescript · Javascript · Node.js · React Native · Typescript
-            </div>
-            <div ref={(el) => (bgTextRefs.current[2] = el)} className="absolute top-[85%] whitespace-nowrap text-9xl font-medium text-gray-100">
-              Adaptive Developer · Problem Solver · Fast Learner · Detail-Oriented · Adaptive Developer · Problem Solver · Fast Learner · Detail-Oriented
+          
+        <section ref={section1Ref} className="h-[95vh] flex flex-col">
+          {/* Background Text */}
+          <div className="absolute top-0 left-0 w-screen h-screen overflow-hidden z-[-1] pointer-events-none">
+            <div className=" w-full h-full flex flex-col justify-between p-10 rotate-10 text-4xl sm:text-5xl md:text-7xl  2xl:text-9xl font-medium">
+              {/* Ref Anda sekarang dipasang di div dalam */}
+              <div ref={(el) => (bgTextRefs.current[0] = el)} className="whitespace-nowrap left-1/2 -translate-x-1/2 text-gray-100">
+                Frontend Developer · Backend Developer · Mobile Developer · UI/UX · Adaptive Developer · Problem Solver · Fast Learner · Detail-Oriented
+              </div>
+              <div ref={(el) => (bgTextRefs.current[1] = el)} className="whitespace-nowrap left-1/2 -translate-x-1/2 text-gray-100">
+                Typescript · Javascript · Node.js · React Native · TailwindCSS · Firebase · Typescript · Javascript · Node.js · React Native · Typescript
+              </div>
+              <div ref={(el) => (bgTextRefs.current[2] = el)} className="whitespace-nowrap text-gray-100">
+                Adaptive Developer · Problem Solver · Fast Learner · Detail-Oriented · Adaptive Developer · Problem Solver · Fast Learner · Detail-Oriented
+              </div>
             </div>
           </div>
           
+          {/* Heading Page */}
           <div className='flex flex-1 flex-col justify-center items-center gap-8'>
             <div className='flex flex-col justify-center items-center gap-4'>
-              <h1 className='hero-title text-8xl font-semibold'>AZISYA LUTHFI BINTANG</h1>
-              <p className='hero-subtitle text-lg font-base'>SoftwareEngineer, Web & Mobile Developer</p>
+              <h1 className='hero-title font-semibold text-2xl sm:text-4xl md:text-6xl 2xl:text-8xl'>AZISYA LUTHFI BINTANG</h1>
+              <p className='btn-animation hero-subtitle md:text-lg lg:text-xl font-base'>SoftwareEngineer, Web & Mobile Developer</p>
             </div>
-            <div className='flex gap-5'>
+            <div className='flex gap-5 text-sm sm:text-base'>
               <button
                 onClick={() => scrollToClick(section3Ref)}
-                className="btn-animation border border-solid border-black rounded-full py-2 px-4 relative overflow-hidden cursor-pointer"
+                className="btn-animation border border-solid border-black rounded-full py-1 sm:py-2 px-2 sm:px-4 relative overflow-hidden cursor-pointer"
                 ref={projectButtonRef}
               >
                 <span className="invisible">See my project</span>
@@ -710,7 +718,7 @@ function App() {
               </a>
             </div>
           </div>
-          <div className='scroll-animate flex flex-col justify-center items-center pb-2 text-gray-600'>
+          <div className='scroll-animate flex flex-col justify-center items-center pb-3 sm:pb-4 md:pb-6 lg:pb-8 text-gray-600'>
             <p>Scroll</p>
             <div>↓</div>
           </div>
