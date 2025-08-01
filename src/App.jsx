@@ -20,6 +20,7 @@ function App() {
   const [hidePreloader, setHidePreloader] = useState(false);
   const [activeImage, setActiveImage] = useState(null);
   const [navbarScrolled, setNavbarScrolled] = useState(false);
+  const [lenis, setLenis] = useState(null);
 
   // Refs for preloader page & container
   const mainRef = useRef();
@@ -52,25 +53,38 @@ function App() {
   const socialButtonRefs = useRef([]);
 
   useEffect(() => {
-    const lenis = new Lenis({
+    // Inisialisasi Lenis
+    const lenisInstance = new Lenis({
       duration: 1.5,
       smooth: true,
       smoothTouch: true
     });
-    function raf(time){
-      lenis.raf(time);
+
+    setLenis(lenisInstance);
+
+    function raf(time) {
+      lenisInstance.raf(time);
       requestAnimationFrame(raf);
     }
     requestAnimationFrame(raf);
-  })
 
-  useEffect(() => {
-    if(!hidePreloader){
-      document.body.style.overflow="hidden";
+    // Cleanup function untuk menghancurkan instance saat komponen di-unmount
+    return () => {
+      lenisInstance.destroy();
+    };
+  }, []);
+
+useEffect(() => {
+  if (lenis) {
+    if (!hidePreloader) {
+      lenis.stop();
+      document.body.style.overflow = "hidden";
     } else {
-      document.body.style.overflow="auto";
+      lenis.start();
+      document.body.style.overflow = "auto";
     }
-  })
+  }
+}, [lenis, hidePreloader]);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -121,10 +135,7 @@ function App() {
         letterSpacing: "0em",
         duration: 0.8, 
         ease:"power2.out", 
-        onStart: () => {
-          window.scrollTo(0, 0);
-          ScrollTrigger.refresh()
-        }},
+      },
       "-=0.6"
     )
 
@@ -134,6 +145,10 @@ function App() {
       x: "-100%",
       duration: 1,
       ease: "power2.inOut",
+      onStart: () => {
+          window.scrollTo(0, 0);
+          ScrollTrigger.refresh()
+      },
       onComplete: () => {
         setHidePreloader(true);
       }
@@ -270,13 +285,13 @@ function App() {
         text,
         {x: 0},
         {
-          x: index % 2 === 0 ? "-75%" : "75%",
+          x: index % 2 === 0 ? "-125%" : "125%",
           ease: "none",
           scrollTrigger: {
             trigger: section1Ref.current,
             start: 'top top',
             end: 'bottom top',
-            scrub: 2.5,
+            scrub: 2,
           }
         }
       )
@@ -679,13 +694,13 @@ function App() {
             <div className=" w-full h-full flex flex-col justify-between p-10 rotate-10 text-4xl sm:text-5xl md:text-7xl  2xl:text-9xl font-medium">
               {/* Ref Anda sekarang dipasang di div dalam */}
               <div ref={(el) => (bgTextRefs.current[0] = el)} className="whitespace-nowrap left-1/2 -translate-x-1/2 text-gray-100">
-                Frontend Developer · Backend Developer · Mobile Developer · UI/UX · Adaptive Developer · Problem Solver · Fast Learner · Detail-Oriented
+                Adaptive Developer · Problem Solver · Fast Learner · Detail-Oriented · Adaptive Developer · Problem Solver · Fast Learner · Detail-Oriented
               </div>
               <div ref={(el) => (bgTextRefs.current[1] = el)} className="whitespace-nowrap left-1/2 -translate-x-1/2 text-gray-100">
                 Typescript · Javascript · Node.js · React Native · TailwindCSS · Firebase · Typescript · Javascript · Node.js · React Native · Typescript
               </div>
               <div ref={(el) => (bgTextRefs.current[2] = el)} className="whitespace-nowrap text-gray-100">
-                Adaptive Developer · Problem Solver · Fast Learner · Detail-Oriented · Adaptive Developer · Problem Solver · Fast Learner · Detail-Oriented
+                Frontend Developer · Backend Developer · Mobile Developer · UI/UX · Adaptive Developer · Problem Solver · Fast Learner · Detail-Oriented
               </div>
             </div>
           </div>
