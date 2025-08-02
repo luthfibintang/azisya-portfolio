@@ -193,6 +193,8 @@ useEffect(() => {
       },
       "-=2"
     )
+    
+    const isMobile = () => window.innerWidth < 768;
 
     // Menu hover animation
     menuRefs.current.forEach((link) => {
@@ -200,6 +202,7 @@ useEffect(() => {
       gsap.set(underline, {scaleX: 0})
 
       link.addEventListener("mouseenter", () => {
+        if (isMobile()) return;
         gsap.to(underline, {
           scaleX: 1,
           duration: 0.3,
@@ -209,6 +212,7 @@ useEffect(() => {
       });
 
       link.addEventListener("mouseleave", () => {
+        if (isMobile()) return;
         gsap.to(underline, {
           scaleX: 0,
           duration: 0.3,
@@ -408,6 +412,7 @@ useEffect(() => {
       gsap.set(bg, { yPercent: 100 });
       
       item.addEventListener('mouseenter', () => {
+        if (isMobile()) return;
         gsap.to(bg, {
           yPercent: 0,
           duration: 0.6,
@@ -427,6 +432,7 @@ useEffect(() => {
       });
       
       item.addEventListener('mouseleave', () => {
+        if (isMobile()) return;
         gsap.to(bg, {
           yPercent: 100,
           duration: 0.6,
@@ -472,7 +478,8 @@ useEffect(() => {
     };
 
     const handleEnter = (e) => {
-       lastMouseEvent = e;
+      if (isMobile()) return;
+      lastMouseEvent = e;
       gsap.set(preview, {
         xPercent: -50,
         yPercent: -50,
@@ -493,6 +500,7 @@ useEffect(() => {
     };
 
     const handleLeave = () => {
+      if (isMobile()) return;
       gsap.to(preview, {
         scale: 0,
         duration: 0.3,
@@ -764,8 +772,8 @@ useEffect(() => {
         </section>
 
         {/* Section 3 for works */}
-        <section ref={section3Ref} className='w-screen flex-col bg-white flex py-20 px-40 justify-between gap-20'>
-          <h1 ref={recentWorkRef} className='font-semibold text-5xl'>
+        <section ref={section3Ref} className='w-screen flex-col bg-white flex justify-between gap-20 py-15 px-15 sm:py-20 sm:px-20 md:py-25 md:px-25 lg:py-30 lg:px-30 xl:py-35 xl:px-35 2xl:py-40 2xl:px-40'>
+          <h1 ref={recentWorkRef} className='font-semibold text-2xl md:text-3xl lg:text-4xl 2xl:text-5xl'>
             Recent Work
           </h1>
           <div ref={linkContainer} className='border-t border-gray-200'>
@@ -775,17 +783,17 @@ useEffect(() => {
                 href={work.link} 
                 target='_blank' 
                 onMouseEnter={() => setActiveImage(work.image)}
-                className='relative flex justify-between items-center h-30 px-10 border-b border-gray-200 cursor-pointer overflow-hidden'
+                className='relative flex justify-between items-center h-30 px-2 sm:px-4 md:px-6 lg:px-8 xl:px-10 border-b border-gray-200 cursor-pointer overflow-hidden'
               >
                 
-                <h2 className='work-title text-2xl z-10 font-medium'>{work.title}</h2>
-                <p className='work-category text-sm z-10 text-gray-500'>{work.category}</p>
+                <h2 className='work-title text-base sm:text-lg md:text-xl lg:text-2xl z-10 font-medium'>{work.title}</h2>
+                <p className='work-category text-xs sm:text-sm z-10 text-gray-500'>{work.category}</p>
                 <div className="work-bg absolute bg-black inset-0"></div>
               </a>
             ))}
               <div
                 ref={previewRef}
-                className="fixed top-0 left-0 pointer-events-none"
+                className="fixed top-0 left-0 pointer-events-none xl:block"
               >
                 <div className="w-lg h-lg bg-black p-1 shadow-2xl relative border">
                   <img
