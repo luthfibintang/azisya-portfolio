@@ -330,7 +330,7 @@ useEffect(() => {
         scrollTrigger: {
           trigger: aboutMeTextRef.current,
           start: 'top 90%',
-          end: 'top 50%',
+          end: 'top 65%',
           scrub: true,
         }
       }
@@ -349,7 +349,7 @@ useEffect(() => {
         scrollTrigger: {
            trigger: whatIDoTitleRef.current,
             start: 'top 90%',
-            end: 'top 50%',
+            end: 'top 65%',
             scrub: true, 
         },
       }
@@ -368,7 +368,7 @@ useEffect(() => {
         scrollTrigger: {
           trigger: whatIDoTextRef.current,
           start: 'top 90%',
-          end: 'top 50%',
+          end: 'top 65%',
           scrub: true,
         }
       }
@@ -740,20 +740,20 @@ useEffect(() => {
         </section>
 
         {/* Section 2 for about me and what to do  */}
-        <section ref={section2Ref} className='w-screen h-screen bg-white flex py-40 px-40 justify-between gap-10'>
+        <section ref={section2Ref} className='w-screen bg-white flex flex-col xl:flex-row py-15 px-15 sm:py-20 sm:px-20 md:py-25 md:px-25 lg:py-30 lg:px-30 xl:py-35 xl:px-35 2xl:py-40 2xl:px-40 justify-between gap-10'>
           {/* About me */}
-          <div className='w-1/2 flex flex-col justify-between'>
-            <div className='flex flex-col gap-10'>
-              <h1 ref={aboutMeTitleRef} className='text-5xl font-semibold'>About Me</h1>
-              <p ref={aboutMeTextRef} className='text-base max-w-2xl leading-7'>I’m a fullstack developer currently pursuing a degree in Informatics, with a strong focus on building modern web and mobile applications. Most of my experience comes from academic projects, hackathons, and personal exploration, which taught me how to solve problems with clarity and structure.</p>
+          <div className='xl:w-1/2 flex flex-col gap-10 justify-between'>
+            <div className='flex flex-col gap-4 xl:gap-10'>
+              <h1 ref={aboutMeTitleRef} className='text-2xl md:text-3xl lg:text-4xl 2xl:text-5xl font-semibold'>About Me</h1>
+              <p ref={aboutMeTextRef} className='text-sm sm:text-base 2xl:text-lg xl:max-w-2xl leading-7'>I’m a fullstack developer currently pursuing a degree in Informatics, with a strong focus on building modern web and mobile applications. Most of my experience comes from academic projects, hackathons, and personal exploration, which taught me how to solve problems with clarity and structure.</p>
             </div>
-            <div className='flex flex-col gap-10'>
-              <h1 ref={whatIDoTitleRef} className='text-5xl font-semibold'>What i do</h1>
-              <p ref={whatIDoTextRef} className='text-base max-w-2xl leading-7'>I primarily work with JavaScript, TypeScript, and PHP to build fullstack applications across both web and mobile platforms. My backend experience includes building REST APIs and scalable architectures with Laravel, Node.js, and Express.js, often paired with databases like MySQL, PostgreSQL, MongoDB, and Firebase. On the frontend, I create responsive interfaces using React.js and mobile experiences using React Native focusing on usability and performance. I enjoy switching between backend logic and frontend development, always aiming for maintainable code and real-world impact.</p>
+            <div className='flex flex-col gap-4 xl:gap-10'>
+              <h1 ref={whatIDoTitleRef} className='text-2xl md:text-3xl lg:text-4xl 2xl:text-5xl font-semibold'>What i do</h1>
+              <p ref={whatIDoTextRef} className='text-sm sm:text-base 2xl:text-lg xl:max-w-2xl leading-7'>I primarily work with JavaScript, TypeScript, and PHP to build fullstack applications across both web and mobile platforms. My backend experience includes building REST APIs and scalable architectures with Laravel, Node.js, and Express.js, often paired with databases like MySQL, PostgreSQL, MongoDB, and Firebase. On the frontend, I create responsive interfaces using React.js and mobile experiences using React Native focusing on usability and performance. I enjoy switching between backend logic and frontend development, always aiming for maintainable code and real-world impact.</p>
             </div>
           </div>
-          <div className='flex flex-col gap-10 w-1/2 items-center justify-end py-10'>
-            <img src={images.profileImage} className='w-auto h-full object-cover' alt='Profile Image'/>
+          <div className='flex flex-col gap-10 xl:w-2/5 items-end justify-center'>
+            <img src={images.profileImage} className='w-full h-auto object-cover' alt='Profile Image'/>
             {/* <a ref={(el) => (menuRefs.current[4] = el)} className='btn-animation text-lg relative' href="#">
               <div className='jump-animation flex relative btn-semibold'>
                 get Resume
