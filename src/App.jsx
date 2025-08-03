@@ -648,6 +648,9 @@ useEffect(() => {
       aboutMeTextSplit.revert();
       whatIDoTitleSplit.revert();
       whatIDoTextSplit.revert();
+      recentWorks.revert();
+      footerText1.revert();
+      footerText2.revert();
     };
 
   }, [])
