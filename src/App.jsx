@@ -21,6 +21,7 @@ function App() {
   const [activeImage, setActiveImage] = useState(null);
   const [navbarScrolled, setNavbarScrolled] = useState(false);
   const [lenis, setLenis] = useState(null);
+  const [isMobileScreen, setIsMobileScreen] = useState(window.innerWidth <= 1024)
 
   // Refs for preloader page & container
   const mainRef = useRef();
@@ -85,6 +86,15 @@ useEffect(() => {
     }
   }
 }, [lenis, hidePreloader]);
+
+useEffect(() => {
+  const handleResize = () => {
+    setIsMobileScreen(window.innerWidth <= 1024);
+  }
+
+  window.addEventListener('resize', handleResize);
+  return () => window.removeEventListener('resize', handleResize);
+})
 
   useEffect(() => {
     const handleScroll = () => {
@@ -194,7 +204,7 @@ useEffect(() => {
       "-=2"
     )
     
-    const isMobile = () => window.innerWidth < 768;
+    const isMobile = () => window.innerWidth <= 1024;
 
     // Menu hover animation
     menuRefs.current.forEach((link) => {
@@ -531,10 +541,10 @@ useEffect(() => {
       }
     )
 
-    const footerText2 = new SplitText(footerText2Ref.current, { type: 'chars' });
+    const footerText2 = new SplitText(footerText2Ref.current, { type: 'words' });
 
     gsap.fromTo(
-      footerText2.chars,
+      footerText2.words,
       { opacity: 0, filter: "blur(5px)" },
       {
         opacity: 1,
@@ -742,7 +752,7 @@ useEffect(() => {
             </div>
           </div>
           <div className='scroll-animate flex flex-col justify-center items-center pb-3 sm:pb-4 md:pb-6 lg:pb-8 text-gray-600'>
-            <p>Scroll</p>
+            <p>{isMobileScreen ? "Swipe" : "Scroll"}</p>
             <div>↓</div>
           </div>
         </section>
@@ -772,7 +782,7 @@ useEffect(() => {
         </section>
 
         {/* Section 3 for works */}
-        <section ref={section3Ref} className='w-screen flex-col bg-white flex justify-between gap-20 py-15 px-15 sm:py-20 sm:px-20 md:py-25 md:px-25 lg:py-30 lg:px-30 xl:py-35 xl:px-35 2xl:py-40 2xl:px-40'>
+        <section ref={section3Ref} className='w-screen flex-col bg-white flex justify-between gap-20 py-15 px-15 sm:pb-20 sm:px-20 md:pb-25 md:px-25 lg:pb-30 lg:px-30 xl:pb-35 xl:px-35 2xl:pb-40 2xl:px-40'>
           <h1 ref={recentWorkRef} className='font-semibold text-2xl md:text-3xl lg:text-4xl 2xl:text-5xl'>
             Recent Work
           </h1>
@@ -806,17 +816,17 @@ useEffect(() => {
           </div>
         </section>
       </main>
-      <footer ref={footerRef} style={{backgroundColor: "#1C1D20"}} className='w-screen h-screen flex-col flex px-40 justify-center gap-25 text-white'>
+        <footer ref={footerRef} style={{backgroundColor: "#1C1D20"}} className='w-screen h-screen flex-col flex justify-center gap-10 lg:gap-15 2xl:gap-25 text-white py-15 px-15 sm:py-20 sm:px-20 md:py-25 md:px-25 lg:py-30 lg:px-30 xl:py-35 xl:px-35 2xl:py-40 2xl:px-40'>
             <div className='flex flex-col gap-10'>
-              <h1 ref={footerText1Ref} className='text-8xl font-semibold letter-spacing-5'>Let's work together</h1>
-              <p ref={footerText2Ref} className='text-xl'>Feel free to reach out if you have a project in mind or just want to connect</p>
+              <h1 ref={footerText1Ref} className='text-2xl sm:text-4xl md:text-6xl 2xl:text-8xl font-semibold letter-spacing-5 whitespace-nowrap'>Let's work together</h1>
+              <p ref={footerText2Ref} className='text-sm sm:text-base md:text-lg 2xl:text-xl'>Feel free to reach out if you have a project in mind or just want to connect</p>
             </div>
             <hr className='opacity-50'/>
-            <div ref={footerButtonContainerRef} className='flex gap-5'>
+            <div ref={footerButtonContainerRef} className='flex flex-col sm:flex-row gap-5 text-sm lg:text-base'>
               <a
                 target='_blank'
                 href='mailto:azisya.luthfibintang@gmail.com'
-                className="footer-btn-animation border border-solid border-white rounded-full py-5 px-8 relative overflow-hidden cursor-pointer"
+                className="footer-btn-animation border border-solid border-white rounded-full py-4 px-7 lg:py-5 lg:px-8 relative overflow-hidden cursor-pointer"
                 ref={(el) => (socialButtonRefs.current[0] = el)}
               >
                 <span className="invisible">azisya.luthfibintang@gmail.com</span>
@@ -830,7 +840,7 @@ useEffect(() => {
               <a
                 target='_blank'
                 href='https://www.linkedin.com/in/azisya-luthfi-bintang/'
-                className="footer-btn-animation border border-solid border-white rounded-full py-5 px-8 relative overflow-hidden cursor-pointer"
+                className="footer-btn-animation border border-solid border-white rounded-full py-4 px-7 lg:py-5 lg:px-8 relative overflow-hidden cursor-pointer"
                 ref={(el) => (socialButtonRefs.current[1] = el)}
               >
                 <span className="invisible">Linkedin</span>
@@ -844,7 +854,7 @@ useEffect(() => {
               <a
                 target='_blank'
                 href='https://github.com/luthfibintang/'
-                className="footer-btn-animation border border-solid border-white rounded-full py-5 px-8 relative overflow-hidden cursor-pointer"
+                className="footer-btn-animation border border-solid border-white rounded-full py-4 px-7 lg:py-5 lg:px-8 relative overflow-hidden cursor-pointer"
                 ref={(el) => (socialButtonRefs.current[2] = el)}
               >
                 <span className="invisible">Github</span>
