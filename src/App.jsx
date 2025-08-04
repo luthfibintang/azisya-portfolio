@@ -730,7 +730,7 @@ useEffect(() => {
           <div className='flex flex-1 flex-col justify-center items-center gap-8'>
             <div className='flex flex-col justify-center items-center gap-4'>
               <h1 className='hero-title font-semibold text-2xl sm:text-4xl md:text-6xl 2xl:text-8xl'>AZISYA LUTHFI BINTANG</h1>
-              <p className='btn-animation hero-subtitle md:text-lg lg:text-xl font-base'>SoftwareEngineer, Web & Mobile Developer</p>
+              <p className='btn-animation hero-subtitle md:text-lg lg:text-xl font-base'>Software Engineer, Web & Mobile Developer</p>
             </div>
             <div className='flex gap-5 text-sm sm:text-base'>
               <button
