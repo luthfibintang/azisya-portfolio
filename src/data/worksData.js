@@ -28,7 +28,7 @@ const works = [
     {
       title: "Regrant",
       category: "Mobile Application",
-      link: "https://github.com/luthfibintang/Quibly",
+      link: "https://github.com/luthfibintang/Regrant",
       image: images.regrantPreview,
     },
     
